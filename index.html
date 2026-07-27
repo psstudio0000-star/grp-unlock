@@ -131,13 +131,14 @@
       <span id="taskText">0 / 5 Tasks</span>
     </div>
 
-    <button class="btn btn-share" onclick="shareApp()">SHARE</button>
+    <button class="btn btn-share" onclick="shareApp()">SHARE (+1 TASK)</button>
     <button id="unlockBtn" class="btn btn-unlock" onclick="watchAdTask()">WATCH AD TO UNLOCK (0/5)</button>
   </div>
 
   <script>
     const TOTAL_TASKS = 5;
     let completedTasks = 0;
+    let hasShared = false;
     
     // Direct links
     const DIRECT_LINK = "https://t.me/Spinnersjoybot/Play";
@@ -173,12 +174,20 @@
         });
     }
 
-    // Updated Share Function to trigger your group invite share link
+    // Share Function: Opens group link AND adds task progress
     function shareApp() {
+      // Open share link
       if (tg) {
         tg.openTelegramLink(CUSTOM_SHARE_LINK);
       } else {
         window.open(CUSTOM_SHARE_LINK, '_blank');
+      }
+
+      // Credit +1 Task for sharing (only once)
+      if (!hasShared && completedTasks < TOTAL_TASKS) {
+        hasShared = true;
+        completedTasks++;
+        updateUI();
       }
     }
 
