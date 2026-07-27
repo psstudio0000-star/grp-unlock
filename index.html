@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grp Unlock</title>
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <!-- Adsgram SDK -->
+  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #0b0e14;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Card Container */
+    .unlock-card {
+      background-color: #121621;
+      border: 1px solid #1e2433;
+      border-radius: 24px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      background-color: #1a1f2c;
+      border-radius: 12px;
+      height: 24px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #0088cc, #00aaff);
+      border-radius: 12px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #8c96a8;
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .btn-share {
+      background-color: #007aff;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+    }
+
+    .btn-unlock {
+      background-color: #1c2230;
+      color: #ffffff;
+      border: 1px solid #2a3347;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="unlock-card">
+    <h2 class="title">HIDDEN CAM IS LOCKED</h2>
+
+    <div class="progress-container">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <div class="progress-stats">
+      <span id="percentText">0% Completed</span>
+      <span id="taskText">0 / 5 Tasks</span>
+    </div>
+
+    <button class="btn btn-share" onclick="shareApp()">SHARE</button>
+    <button id="unlockBtn" class="btn btn-unlock" onclick="watchAdTask()">UNLOCK VIDEOS (0/5)</button>
+  </div>
+
+  <script>
+    const TOTAL_TASKS = 5;
+    let completedTasks = 0;
+    const MINI_APP_LINK = "https://t.me/grpbotlock_bot/aza?startapp=001";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) tg.expand();
+
+    // Initialize Adsgram with Block ID 39966
+    const AdController = Adsgram.init({ blockId: "39966" });
+
+    function watchAdTask() {
+      if (completedTasks >= TOTAL_TASKS) {
+        if (tg) {
+          tg.openTelegramLink(MINI_APP_LINK);
+        } else {
+          window.location.href = MINI_APP_LINK;
+        }
+        return;
+      }
+
+      // Trigger Adsgram Video Ad
+      AdController.show()
+        .then((result) => {
+          completedTasks++;
+          updateUI();
+        })
+        .catch((error) => {
+          console.log("Ad closed or failed to load:", error);
+        });
+    }
+
+    function shareApp() {
+      const shareText = "Unlock hidden content!";
+      const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(MINI_APP_LINK)}&text=${encodeURIComponent(shareText)}`;
+      
+      if (tg) {
+        tg.openTelegramLink(shareUrl);
+      } else {
+        window.open(shareUrl, '_blank');
+      }
+    }
+
+    function updateUI() {
+      const percentage = Math.round((completedTasks / TOTAL_TASKS) * 100);
+      
+      document.getElementById("progressBar").style.width = percentage + "%";
+      document.getElementById("percentText").innerText = percentage + "% Completed";
+      document.getElementById("taskText").innerText = `${completedTasks} / ${TOTAL_TASKS} Tasks`;
+      document.getElementById("unlockBtn").innerText = `UNLOCK VIDEOS (${completedTasks}/${TOTAL_TASKS})`;
+
+      if (completedTasks >= TOTAL_TASKS) {
+        const btn = document.getElementById("unlockBtn");
+        btn.innerText = "ACCESS CONTENT";
+        btn.style.backgroundColor = "#28a745";
+      }
+    }
+  </script>
+</body>
+  </html>
