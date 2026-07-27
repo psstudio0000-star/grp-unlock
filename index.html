@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grp Unlock</title>
+  <title>Spinners Joy - Win Prizes</title>
   
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -45,8 +45,15 @@
       font-size: 20px;
       font-weight: 800;
       letter-spacing: 0.5px;
-      margin-bottom: 24px;
+      margin-bottom: 8px;
       text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #00aaff;
+      margin-bottom: 24px;
+      font-weight: 600;
     }
 
     /* Progress Bar */
@@ -112,7 +119,8 @@
 <body>
 
   <div class="unlock-card">
-    <h2 class="title">HIDDEN CAM IS LOCKED</h2>
+    <h2 class="title">SPINNERS JOY</h2>
+    <p class="subtitle">🎁 Win the Prizes!</p>
 
     <div class="progress-container">
       <div id="progressBar" class="progress-bar"></div>
@@ -124,13 +132,16 @@
     </div>
 
     <button class="btn btn-share" onclick="shareApp()">SHARE</button>
-    <button id="unlockBtn" class="btn btn-unlock" onclick="watchAdTask()">UNLOCK VIDEOS (0/5)</button>
+    <button id="unlockBtn" class="btn btn-unlock" onclick="watchAdTask()">WATCH AD TO UNLOCK (0/5)</button>
   </div>
 
   <script>
     const TOTAL_TASKS = 5;
     let completedTasks = 0;
-    const MINI_APP_LINK = "https://t.me/grpbotlock_bot/aza?startapp=001";
+    
+    // Updated Direct Links
+    const DIRECT_LINK = "https://t.me/Spinnersjoybot/Play";
+    const WEB_APP_URL = "https://jackspinner07.blogspot.com/?m=1";
 
     const tg = window.Telegram?.WebApp;
     if (tg) tg.expand();
@@ -141,14 +152,14 @@
     function watchAdTask() {
       if (completedTasks >= TOTAL_TASKS) {
         if (tg) {
-          tg.openTelegramLink(MINI_APP_LINK);
+          tg.openTelegramLink(DIRECT_LINK);
         } else {
-          window.location.href = MINI_APP_LINK;
+          window.location.href = WEB_APP_URL;
         }
         return;
       }
 
-      // Trigger Adsgram Video Ad
+      // Show Adsgram Ad
       AdController.show()
         .then((result) => {
           completedTasks++;
@@ -160,8 +171,8 @@
     }
 
     function shareApp() {
-      const shareText = "Unlock hidden content!";
-      const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(MINI_APP_LINK)}&text=${encodeURIComponent(shareText)}`;
+      const shareText = "Play Spinners Joy & Win Prizes!";
+      const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(DIRECT_LINK)}&text=${encodeURIComponent(shareText)}`;
       
       if (tg) {
         tg.openTelegramLink(shareUrl);
@@ -176,14 +187,14 @@
       document.getElementById("progressBar").style.width = percentage + "%";
       document.getElementById("percentText").innerText = percentage + "% Completed";
       document.getElementById("taskText").innerText = `${completedTasks} / ${TOTAL_TASKS} Tasks`;
-      document.getElementById("unlockBtn").innerText = `UNLOCK VIDEOS (${completedTasks}/${TOTAL_TASKS})`;
+      document.getElementById("unlockBtn").innerText = `WATCH AD TO UNLOCK (${completedTasks}/${TOTAL_TASKS})`;
 
       if (completedTasks >= TOTAL_TASKS) {
         const btn = document.getElementById("unlockBtn");
-        btn.innerText = "ACCESS CONTENT";
+        btn.innerText = "CLAIM PRIZES NOW";
         btn.style.backgroundColor = "#28a745";
       }
     }
   </script>
 </body>
-  </html>
+</html>
