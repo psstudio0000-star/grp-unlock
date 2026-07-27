@@ -139,9 +139,12 @@
     const TOTAL_TASKS = 5;
     let completedTasks = 0;
     
-    // Updated Direct Links
+    // Direct links
     const DIRECT_LINK = "https://t.me/Spinnersjoybot/Play";
     const WEB_APP_URL = "https://jackspinner07.blogspot.com/?m=1";
+    
+    // Custom Share Link
+    const CUSTOM_SHARE_LINK = "https://t.me/share/url?url=%20JOIN%20THIS%20AMAZING%20GROUP%20%F0%9F%A5%B5%20-%20https%3A%2F%2Ft.me%2F%2BIReYrDe7TbowZGNl";
 
     const tg = window.Telegram?.WebApp;
     if (tg) tg.expand();
@@ -170,14 +173,12 @@
         });
     }
 
+    // Updated Share Function to trigger your group invite share link
     function shareApp() {
-      const shareText = "Play Spinners Joy & Win Prizes!";
-      const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(DIRECT_LINK)}&text=${encodeURIComponent(shareText)}`;
-      
       if (tg) {
-        tg.openTelegramLink(shareUrl);
+        tg.openTelegramLink(CUSTOM_SHARE_LINK);
       } else {
-        window.open(shareUrl, '_blank');
+        window.open(CUSTOM_SHARE_LINK, '_blank');
       }
     }
 
