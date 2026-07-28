@@ -1,215 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mom Grups Locked 🔒</title>
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Group Unlock</title>
   <!-- Telegram WebApp SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js?v=2"></script>
-  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <!-- Adsgram SDK -->
-  <script src="https://sad.adsgram.ai/js/sad.min.js?v=2"></script>
+  <script src="https://sad.adsgram.ai/js/sad-index.js"></script>
 
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-
     body {
-      background-color: #0b0e14;
-      color: #ffffff;
+      background-color: var(--tg-theme-bg-color, #121212);
+      color: var(--tg-theme-text-color, #ffffff);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       min-height: 100vh;
       padding: 20px;
-    }
-
-    /* Card Container */
-    .unlock-card {
-      background-color: #121621;
-      border: 1px solid #1e2433;
-      border-radius: 24px;
-      padding: 32px 24px;
-      width: 100%;
-      max-width: 360px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     }
-
-    .title {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #00aaff;
-      margin-bottom: 24px;
-      font-weight: 600;
-    }
-
-    /* Progress Bar */
-    .progress-container {
+    .container {
       width: 100%;
-      background-color: #1a1f2c;
-      border-radius: 12px;
-      height: 24px;
-      overflow: hidden;
+      max-width: 400px;
+      background: var(--tg-theme-secondary-bg-color, #1e1e1e);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 22px;
       margin-bottom: 12px;
     }
-
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #0088cc, #00aaff);
-      border-radius: 12px;
-      transition: width 0.3s ease;
-    }
-
-    .progress-stats {
-      display: flex;
-      justify-content: space-between;
+    p {
       font-size: 14px;
-      color: #8c96a8;
-      margin-bottom: 28px;
-      font-weight: 500;
+      color: var(--tg-theme-hint-color, #aaaaaa);
+      margin-bottom: 24px;
     }
-
-    /* Buttons */
     .btn {
       width: 100%;
-      padding: 16px;
-      border-radius: 14px;
-      border: none;
+      padding: 14px;
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 600;
+      color: #ffffff;
+      background-color: var(--tg-theme-button-color, #2481cc);
+      border: none;
+      border-radius: 12px;
       cursor: pointer;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: transform 0.1s, opacity 0.2s;
+      transition: background 0.2s;
     }
-
     .btn:active {
-      transform: scale(0.98);
-      opacity: 0.9;
+      opacity: 0.8;
     }
-
-    .btn-share {
-      background-color: #007aff;
-      color: #ffffff;
-      box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
-    }
-
-    .btn-unlock {
-      background-color: #1c2230;
-      color: #ffffff;
-      border: 1px solid #2a3347;
+    #status {
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
 
-  <div class="unlock-card">
-    <h2 class="title">MOM GRUPS LOCKED 🔒</h2>
-    <p class="subtitle">Complete tasks to unlock access</p>
-
-    <div class="progress-container">
-      <div id="progressBar" class="progress-bar"></div>
-    </div>
-
-    <div class="progress-stats">
-      <span id="percentText">0% Completed</span>
-      <span id="taskText">0 / 5 Tasks</span>
-    </div>
-
-    <button class="btn btn-share" onclick="shareApp()">SHARE (+1 TASK)</button>
-    <button id="unlockBtn" class="btn btn-unlock" onclick="watchAdTask()">WATCH AD TO UNLOCK (0/5)</button>
+  <div class="container">
+    <h1>Group Unlock</h1>
+    <p>Watch a quick sponsored ad to unlock full group access.</p>
+    
+    <button class="btn" id="watchAdBtn">Watch Ad & Unlock</button>
+    <div id="status"></div>
   </div>
 
   <script>
-    const TOTAL_TASKS = 5;
-    let completedTasks = 0;
-    let hasShared = false;
-    
-    // Direct links
-    const DIRECT_LINK = "https://t.me/Spinnersjoybot/Play";
-    const WEB_APP_URL = "https://jackspinner07.blogspot.com/?m=1";
-    
-    // Custom Share Link
-    const CUSTOM_SHARE_LINK = "https://t.me/share/url?url=%20JOIN%20THIS%20AMAZING%20GROUP%20%F0%9F%A5%B5%20-%20https%3A%2F%2Ft.me%2F%2BIReYrDe7TbowZGNl";
-
+    // 1. Initialize Telegram WebApp
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.ready();
       tg.expand();
     }
 
-    // Read ?startapp= parameter dynamically
-    const startParam = tg?.initDataUnsafe?.start_param || "";
-    console.log("Start Param Received:", startParam);
+    // 2. Adsgram Block ID
+    const ADSGRAM_BLOCK_ID = "40102";
 
-    // Initializing Adsgram with Block ID: 40102
-    const AdController = Adsgram.init({ blockId: "40102" });
+    // 3. Initialize Adsgram Controller
+    const AdController = window.Adsgram?.init({
+      blockId: ADSGRAM_BLOCK_ID
+    });
 
-    function watchAdTask() {
-      if (completedTasks >= TOTAL_TASKS) {
-        if (tg) {
-          tg.openTelegramLink(DIRECT_LINK);
-        } else {
-          window.location.href = WEB_APP_URL;
-        }
+    const adBtn = document.getElementById('watchAdBtn');
+    const statusDiv = document.getElementById('status');
+
+    // 4. Handle Ad Display
+    adBtn.addEventListener('click', async () => {
+      if (!AdController) {
+        statusDiv.style.color = '#ff5252';
+        statusDiv.innerText = "Adsgram SDK failed to load.";
         return;
       }
 
-      // Show Adsgram Ad
-      AdController.show()
-        .then((result) => {
-          completedTasks++;
-          updateUI();
-        })
-        .catch((error) => {
-          console.log("Ad closed or failed to load:", error);
-        });
-    }
+      statusDiv.style.color = '#aaaaaa';
+      statusDiv.innerText = "Loading ad...";
 
-    // Share Function: Opens group link AND adds task progress
-    function shareApp() {
-      if (tg) {
-        tg.openTelegramLink(CUSTOM_SHARE_LINK);
-      } else {
-        window.open(CUSTOM_SHARE_LINK, '_blank');
+      try {
+        const result = await AdController.show();
+        
+        // Ad completed successfully
+        statusDiv.style.color = '#4caf50';
+        statusDiv.innerText = "✅ Ad completed! Unlocking access...";
+        
+        // Notify Telegram WebApp
+        if (tg) {
+          tg.HapticFeedback?.notificationOccurred('success');
+        }
+
+      } catch (error) {
+        // Ad was skipped, failed to fill, or closed early
+        statusDiv.style.color = '#ff5252';
+        statusDiv.innerText = "❌ Ad not completed. Please try again.";
+        
+        if (tg) {
+          tg.HapticFeedback?.notificationOccurred('error');
+        }
       }
-
-      if (!hasShared && completedTasks < TOTAL_TASKS) {
-        hasShared = true;
-        completedTasks++;
-        updateUI();
-      }
-    }
-
-    function updateUI() {
-      const percentage = Math.round((completedTasks / TOTAL_TASKS) * 100);
-      
-      document.getElementById("progressBar").style.width = percentage + "%";
-      document.getElementById("percentText").innerText = percentage + "% Completed";
-      document.getElementById("taskText").innerText = `${completedTasks} / ${TOTAL_TASKS} Tasks`;
-      document.getElementById("unlockBtn").innerText = `WATCH AD TO UNLOCK (${completedTasks}/${TOTAL_TASKS})`;
-
-      if (completedTasks >= TOTAL_TASKS) {
-        const btn = document.getElementById("unlockBtn");
-        btn.innerText = "ACCESS GROUP NOW";
-        btn.style.backgroundColor = "#28a745";
-      }
-    }
+    });
   </script>
+
 </body>
 </html>
