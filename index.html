@@ -84,22 +84,18 @@
       tg.expand();
     }
 
-    // 2. Adsgram Block ID
+    // 2. Your Adsgram Block ID
     const ADSGRAM_BLOCK_ID = "40102";
-
-    // 3. Initialize Adsgram Controller
-    const AdController = window.Adsgram?.init({
-      blockId: ADSGRAM_BLOCK_ID
-    });
 
     const adBtn = document.getElementById('watchAdBtn');
     const statusDiv = document.getElementById('status');
 
-    // 4. Handle Ad Display
+    // 3. Handle Ad Display
     adBtn.addEventListener('click', async () => {
-      if (!AdController) {
+      // Check if Adsgram library is loaded
+      if (!window.Adsgram) {
         statusDiv.style.color = '#ff5252';
-        statusDiv.innerText = "Adsgram SDK failed to load.";
+        statusDiv.innerText = "Adsgram SDK loading... Please try again in a few seconds.";
         return;
       }
 
@@ -107,21 +103,24 @@
       statusDiv.innerText = "Loading ad...";
 
       try {
-        const result = await AdController.show();
+        // Initialize controller dynamically when button is clicked
+        const AdController = window.Adsgram.init({
+          blockId: ADSGRAM_BLOCK_ID
+        });
+
+        await AdController.show();
         
-        // Ad completed successfully
+        // Success
         statusDiv.style.color = '#4caf50';
         statusDiv.innerText = "✅ Ad completed! Unlocking access...";
         
-        // Notify Telegram WebApp
         if (tg) {
           tg.HapticFeedback?.notificationOccurred('success');
         }
 
       } catch (error) {
-        // Ad was skipped, failed to fill, or closed early
         statusDiv.style.color = '#ff5252';
-        statusDiv.innerText = "❌ Ad not completed. Please try again.";
+        statusDiv.innerText = "❌ Ad not completed or no fill. Try again.";
         
         if (tg) {
           tg.HapticFeedback?.notificationOccurred('error');
