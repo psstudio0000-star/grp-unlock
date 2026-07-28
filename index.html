@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spinners Joy - Win Prizes</title>
+  <title>Mom Grups Locked 🔒</title>
   
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -119,8 +119,8 @@
 <body>
 
   <div class="unlock-card">
-    <h2 class="title">SPINNERS JOY</h2>
-    <p class="subtitle">🎁 Win the Prizes!</p>
+    <h2 class="title">MOM GRUPS LOCKED 🔒</h2>
+    <p class="subtitle">Complete tasks to unlock access</p>
 
     <div class="progress-container">
       <div id="progressBar" class="progress-bar"></div>
@@ -176,14 +176,12 @@
 
     // Share Function: Opens group link AND adds task progress
     function shareApp() {
-      // Open share link
       if (tg) {
         tg.openTelegramLink(CUSTOM_SHARE_LINK);
       } else {
         window.open(CUSTOM_SHARE_LINK, '_blank');
       }
 
-      // Credit +1 Task for sharing (only once)
       if (!hasShared && completedTasks < TOTAL_TASKS) {
         hasShared = true;
         completedTasks++;
@@ -201,7 +199,7 @@
 
       if (completedTasks >= TOTAL_TASKS) {
         const btn = document.getElementById("unlockBtn");
-        btn.innerText = "CLAIM PRIZES NOW";
+        btn.innerText = "ACCESS GROUP NOW";
         btn.style.backgroundColor = "#28a745";
       }
     }
