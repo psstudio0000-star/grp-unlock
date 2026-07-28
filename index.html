@@ -157,8 +157,8 @@
     const startParam = tg?.initDataUnsafe?.start_param || "";
     console.log("Start Param Received:", startParam);
 
-    // Initialize Adsgram (Replace '39966' with your NEW Block ID from Adsgram dashboard for GitHub Pages)
-    const AdController = Adsgram.init({ blockId: "39966" });
+    // Initializing Adsgram with your NEW Block ID: 40102
+    const AdController = Adsgram.init({ blockId: "40102" });
 
     function watchAdTask() {
       if (completedTasks >= TOTAL_TASKS) {
