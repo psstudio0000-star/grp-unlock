@@ -148,9 +148,16 @@
     const CUSTOM_SHARE_LINK = "https://t.me/share/url?url=%20JOIN%20THIS%20AMAZING%20GROUP%20%F0%9F%A5%B5%20-%20https%3A%2F%2Ft.me%2F%2BIReYrDe7TbowZGNl";
 
     const tg = window.Telegram?.WebApp;
-    if (tg) tg.expand();
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
 
-    // Initialize Adsgram with Block ID 39966
+    // Read ?startapp= parameter dynamically
+    const startParam = tg?.initDataUnsafe?.start_param || "";
+    console.log("Start Param Received:", startParam);
+
+    // Initialize Adsgram (Replace '39966' with your NEW Block ID from Adsgram dashboard for GitHub Pages)
     const AdController = Adsgram.init({ blockId: "39966" });
 
     function watchAdTask() {
